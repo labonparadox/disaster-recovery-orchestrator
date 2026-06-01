@@ -1,1 +1,4 @@
 /backend/.env
+.idea
+.venv
+.dockerignore
