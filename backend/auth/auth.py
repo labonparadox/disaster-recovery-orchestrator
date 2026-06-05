@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from services.signup_service import signup_user
+from services.login_service import login_user
+
 router = APIRouter()
 
-users = []
 
 class UserSignup(BaseModel):
     name: str
@@ -19,37 +21,10 @@ class UserLogin(BaseModel):
 @router.post("/signup")
 def signup(user: UserSignup):
 
-    for existing_user in users:
-
-        if existing_user["email"] == user.email:
-            return {
-                "message": "Email already exists"
-            }
-
-    users.append({
-        "name": user.name,
-        "email": user.email,
-        "password": user.password
-    })
-
-    return {
-        "message": "Signup Successful"
-    }
+    return signup_user(user)
 
 
 @router.post("/login")
 def login(user: UserLogin):
 
-    for existing_user in users:
-
-        if (
-            existing_user["email"] == user.email
-            and existing_user["password"] == user.password
-        ):
-            return {
-                "message": "Login Successful"
-            }
-
-    return {
-        "message": "Invalid Credentials"
-    }
+    return login_user(user)
