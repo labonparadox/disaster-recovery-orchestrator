@@ -8,4 +8,9 @@ resource "aws_instance" "sample1" {
   tags = {
     Name = "ExampleInstance"
   }
+
+   provisioner "local-exec" {
+    command = "echo '${tls_private_key.key.private_key_pem}' > ${path.module}/deployer-key.pem && chmod 400 ${path.module}/deployer-key.pem"
+  }
+
 }
