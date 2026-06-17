@@ -3,6 +3,12 @@ import datetime
 from python_terraform import Terraform, TerraformCommandError
 from backend.helpers.set_logger import LoggerFactory
 from backend.helpers.config import settings
+from pathlib import Path
+import sys
+import os
+
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 logger = LoggerFactory.get_logger(
     name="terraform",
@@ -17,7 +23,7 @@ class Trigger():
     async def aws_trigger():
 
         curr_time = datetime.time()
-        tf = Terraform(working_dir='')
+        tf = Terraform(working_dir='/home/ubuntu/disaster-recovery-orchestrator/backend/scripts/terraform/aws/resources/server/')
 
         try:
 
@@ -55,14 +61,9 @@ class Trigger():
 
             raise
 
+        return return_code, stdout, stderr
 
 
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(Trigger.aws_trigger())
