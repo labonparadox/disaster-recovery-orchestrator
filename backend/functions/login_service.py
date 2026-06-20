@@ -1,31 +1,40 @@
-from backend.functions.signup_service import users
-from backend.helpers.set_logger import LoggerFactory
-from backend.helpers.config import settings
-import logging
-
-logger = LoggerFactory.get_logger(
-    name="login_service",
-    log_file=settings.Log_file_login,
-    level=logging.INFO
-)
-
-
+from database.db import get_db_connection
 
 def login_user(user):
 
-    for existing_user in users:
+    conn = get_db_connection()
 
-        logger.info(
-            f"req arrive for login {user}"
-        )
+    if conn is None:
+        return {
+        "message": "Database connection failed"
+    }
 
-        if (
-            existing_user["email"] == user.email
-            and existing_user["password"] == user.password
-        ):
-            return {
-                "message": "Login Successful"
-            }
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+    SELECT * FROM users
+    WHERE email = %s
+    AND password = %s
+    """
+
+    values = (
+        user.email,
+        user.password
+    )
+
+    cursor.execute(query, values)
+
+    existing_user = cursor.fetchone()
+
+    cursor.close()
+
+    conn.close()
+
+    if existing_user:
+
+        return {
+            "message": "Login Successful"
+        }
 
     return {
         "message": "Invalid Credentials"

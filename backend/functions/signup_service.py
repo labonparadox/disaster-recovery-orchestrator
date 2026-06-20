@@ -4,6 +4,11 @@ def signup_user(user):
 
     conn = get_db_connection()
 
+    if conn is None:
+        return {
+            "message": "Database connection failed"
+        }
+
     cursor = conn.cursor(dictionary=True)
 
     # Check if email already exists
