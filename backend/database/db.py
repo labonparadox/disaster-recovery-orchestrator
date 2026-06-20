@@ -1,13 +1,14 @@
 import mysql.connector
+from backend.helpers.config import settings
 
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
-            host="database-1.clegc42skt93.ap-south-1.rds.amazonaws.com",
-            user="admin",
-            password="Shruti1234",
-            database="disaster_recovery",
-            port=3306
+            host= settings.Endpoint,
+            user=settings.user,
+            password=settings.password,
+            database=settings.database,
+            port=settings.port
         )
 
         print("Database connected successfully")

@@ -10,6 +10,11 @@ class data(BaseSettings):
     Log_file_terraform: Optional[str] = None
     Log_file_login: Optional[str] = None
     Log_file_signup: Optional[str] = None
+    Endpoint: Optional[str] = None
+    user: Optional[str] = None
+    password: Optional[str] = None
+    database: Optional[str] = None
+    port: Optional[str] = None
 
 
     class Config:
