@@ -8,4 +8,6 @@ resource "aws_instance" "sample1" {
   tags = {
     Name = "ExampleInstance"
   }
+
+
 }

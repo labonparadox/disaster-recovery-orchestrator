@@ -1,4 +1,3 @@
-/backend/.env
-.idea
-.venv
-.dockerignore
+__pycache__/
+*.pyc
+.venv/
