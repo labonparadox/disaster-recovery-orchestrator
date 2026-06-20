@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from backend.functions.signup_service import signup_user
+from functions.signup_service import signup_user
 
 router = APIRouter()
 

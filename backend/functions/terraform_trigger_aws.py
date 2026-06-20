@@ -2,8 +2,8 @@ import logging
 import datetime
 import subprocess
 from python_terraform import Terraform, TerraformCommandError
-from backend.helpers.set_logger import LoggerFactory
-from backend.helpers.config import settings
+from helpers.set_logger import LoggerFactory
+from helpers.config import settings
 from pathlib import Path
 import sys
 import os

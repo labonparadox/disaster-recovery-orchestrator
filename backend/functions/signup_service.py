@@ -1,10 +1,10 @@
-from backend.database.db import get_db_connection
+from database.db import get_db_connection
 
 def signup_user(user):
 
     conn = get_db_connection()
 
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     # Check if email already exists
 
@@ -24,7 +24,6 @@ def signup_user(user):
             "message": "Email already exists"
         }
 
-    # Insert new user
 
     insert_query = """
     INSERT INTO users(name, email, password)
