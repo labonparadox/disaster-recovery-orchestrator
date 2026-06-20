@@ -1,30 +1,8 @@
-<<<<<<< HEAD:backend/services/signup_service.py
 from database.db import get_db_connection
 
 def signup_user(user):
 
     conn = get_db_connection()
-=======
-from backend.helpers.set_logger import LoggerFactory
-from backend.helpers.config import settings
-import logging
-
-logger = LoggerFactory.get_logger(
-    name="signup_service",
-    log_file=settings.Log_file_signup,
-    level=logging.INFO
-)
-
-users = []
-
-def signup_user(user):
-
-    logger.info(
-        f"req arrive for login {user}"
-    )
-
-    for existing_user in users:
->>>>>>> 513060e7093b1ad5fa1a7270412e112d83b96b31:backend/functions/signup_service.py
 
     cursor = conn.cursor(dictionary=True)
 
