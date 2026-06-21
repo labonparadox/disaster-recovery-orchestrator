@@ -4,4 +4,3 @@ gunicorn
 pymysql
 pydantic_settings
 pydantic
-python_terraform
