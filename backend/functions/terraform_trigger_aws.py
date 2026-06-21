@@ -5,7 +5,6 @@ from helpers.set_logger import LoggerFactory
 from helpers.config import settings
 import os
 import sys
-import asyncio
 import traceback
 from pathlib import Path
 
@@ -20,7 +19,7 @@ logger = LoggerFactory.get_logger(
 
 class Trigger():
     @staticmethod
-    async def aws_trigger():
+    async def aws_trigger(key,sg_name,server_name):
         curr_time = datetime.datetime.now()
 
         working_dir = '/home/ubuntu/disaster-recovery-orchestrator/backend/scripts/terraform/aws/resources/server/'
