@@ -9,6 +9,9 @@ class UserSignup(BaseModel):
     name: str
     email: str
     password: str
+    image: str
+    port: int
+    health_point: str
 
 
 @router.post("/signup")
