@@ -1,15 +1,9 @@
 import subprocess
 import logging
-import datetime
+import os
 from helpers.set_logger import LoggerFactory
 from helpers.config import settings
-import os
-import sys
 import traceback
-from pathlib import Path
-
-project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root))
 
 logger = LoggerFactory.get_logger(
     name="terraform",
@@ -19,63 +13,48 @@ logger = LoggerFactory.get_logger(
 
 class Trigger():
     @staticmethod
-    async def aws_trigger(key,sg_name,server_name):
-        curr_time = datetime.datetime.now()
-
-        working_dir = '/home/ubuntu/disaster-recovery-orchestrator/backend/scripts/terraform/aws/resources/server/'
-
-        # Check SSH key
-        ssh_key = os.path.expanduser("~/.ssh/id_rsa.pub")
-        if not os.path.exists(ssh_key):
-            subprocess.run([
-                'ssh-keygen', '-t', 'rsa', '-b', '2048',
-                '-f', os.path.expanduser("~/.ssh/id_rsa"),
-                '-N', ''
-            ], check=True)
-
-        os.chdir(working_dir)
-
+    async def aws_trigger(key=None, sg_name=None, server_name=None):
         try:
+            working_dir = '/home/ubuntu/disaster-recovery-orchestrator/backend/scripts/terraform/aws/resources/server/'
+
+            userdata_path = os.path.join(working_dir, 'userdata.sh')
+            if not os.path.exists(userdata_path):
+                logger.error(f"userdata.sh not found at {userdata_path}")
+                return {"message": "userdata.sh not found. Please create it first."}
+
+            logger.info(f" Found userdata.sh at {userdata_path}")
+
+            os.chdir(working_dir)
+            logger.info(f"Working directory: {os.getcwd()}")
+
+            logger.info("Running terraform init...")
             result = subprocess.run(
                 ['terraform', 'init'],
                 capture_output=True,
                 text=True,
                 check=True
             )
+            logger.info(" Terraform init successful")
 
-        except subprocess.CalledProcessError as e:
-
-            raise
-
-        try:
+            logger.info("Running terraform plan...")
             result = subprocess.run(
                 ['terraform', 'plan'],
                 capture_output=True,
                 text=True,
                 check=True
             )
+            logger.info("Terraform plan successful")
 
-        except subprocess.CalledProcessError as e:
-            logger.info(e)
-
-        # Step 3: Terraform Apply with AUTO APPROVAL
-
-        try:
+            logger.info("Running terraform apply...")
             result = subprocess.run(
                 ['terraform', 'apply', '-auto-approve'],
                 capture_output=True,
                 text=True,
-                check=True,
-                input='yes\n'
+                check=True
             )
+            logger.info("Terraform apply successful")
+            logger.info(f"Apply output: {result.stdout}")
 
-
-
-        except subprocess.CalledProcessError as e:
-
-            raise RuntimeError(f"Terraform apply failed with code {e.returncode}")
-
-        try:
             result = subprocess.run(
                 ['terraform', 'output'],
                 capture_output=True,
@@ -83,16 +62,21 @@ class Trigger():
                 check=True
             )
 
+            return {
+                "message": "Deployment successful",
+                "output": result.stdout
+            }
+
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Terraform command failed with code {e.returncode}")
+            logger.error(f"STDERR: {e.stderr}")
+            logger.error(f"STDOUT: {e.stdout}")
+            return {
+                "message": f"Terraform failed with code {e.returncode}",
+                "error": e.stderr,
+                "returncode": e.returncode
+            }
         except Exception as e:
-            logger.info(e)
-
-
-if __name__ == "__main__":
-    import asyncio
-    try:
-        asyncio.run(Trigger.aws_trigger())
-    except KeyboardInterrupt:
-        logger.info("issue happens")
-    except Exception as e:
-
-        traceback.print_exc()
+            logger.error(f"Deployment failed: {e}")
+            traceback.print_exc()
+            return {"message": f"Deployment failed: {str(e)}"}

@@ -18,58 +18,58 @@ logger = LoggerFactory.get_logger(
 )
 
 class Data(BaseModel):
-
     id: int
-
 
 @router.post("/deploy")
 async def deploy(data: Data):
-
     id = data.id
 
     try:
-
         info = fetch_data.Fetch.take_for_deploy(id)
-
         image = info[0]
         port = info[1]
         health_point = info[2]
         email = info[3]
         name = info[4]
 
-        logger.info(f"the data db fetched is {info}")
+        logger.info(f"Data fetched from DB: {info}")
 
     except Exception as e:
-
-        logger.info(f"Fetching from failed {e}")
-
-
+        logger.error(f"Fetching from DB failed: {e}")
+        return {"message": f"Failed to fetch data: {str(e)}"}
 
     curr_time = datetime.datetime.now()
-
-    key = f"{name}_key_{curr_time}"
-    sg_name = f"{name}_sg_{curr_time}"
-    server_name = f"{name}_sn_{curr_time}"
-
-    try:
-
-        await docker_filler.Docker_fill.script_maker(image,port,name)
-
-    except Exception as e:
-        logger.info(f"docker filler failed {e}")
+    key = f"{name}_key_{curr_time.strftime('%Y%m%d_%H%M%S')}"
+    sg_name = f"{name}_sg_{curr_time.strftime('%Y%m%d_%H%M%S')}"
+    server_name = f"{name}_sn_{curr_time.strftime('%Y%m%d_%H%M%S')}"
 
     try:
-        await terraform_trigger_aws.Trigger.aws_trigger(key,sg_name,server_name)
+        userdata_path = await docker_filler.Docker_fill.file_saver(
+            image=image,
+            port=port,
+            username=name
+        )
+        logger.info(f"userdata.sh created at: {userdata_path}")
 
     except Exception as e:
+        logger.error(f"docker_filler failed: {e}")
+        return {"message": f"Docker script creation failed: {str(e)}"}
 
-        logger.info(f"terraform trigger failed {e}")
+    try:
+        result = await terraform_trigger_aws.Trigger.aws_trigger(
+            key=key,
+            sg_name=sg_name,
+            server_name=server_name
+        )
+        logger.info(f"Terraform deployment successful: {result}")
+        return {
+            "message": "Deployment successful",
+            "key": key,
+            "sg_name": sg_name,
+            "server_name": server_name,
+            "userdata": userdata_path
+        }
 
-
-
-
-
-
-
-
-
+    except Exception as e:
+        logger.error(f"Terraform deployment failed: {e}")
+        return {"message": f"Terraform deployment failed: {str(e)}"}
