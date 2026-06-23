@@ -3,8 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from helpers.config import settings
 
+DATABASE_URL = f"mysql+pymysql://{settings.db_user}:{settings.db_password}@{settings.Endpoint}:{settings.port}/{settings.database}"
 
-engine = create_engine(settings.Endpoint)
+
+engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
 class ClientInfo(Base):

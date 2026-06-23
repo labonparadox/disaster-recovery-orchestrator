@@ -26,14 +26,17 @@ def signup_user(user):
 
 
     insert_query = """
-    INSERT INTO users(name, email, password)
-    VALUES(%s, %s, %s)
+    INSERT INTO users(name, email, password, docker_image, port , health_point)
+    VALUES(%s, %s, %s,%s,%s,%s)
     """
 
     values = (
         user.name,
         user.email,
-        user.password
+        user.password,
+        user.image,
+        user.port,
+        user.health_point
     )
 
     cursor.execute(insert_query, values)

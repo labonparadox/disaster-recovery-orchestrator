@@ -9,19 +9,17 @@ logger = LoggerFactory.get_logger(
     level=logging.INFO
 )
 
-
 def get_db_connection():
     try:
         connection = pymysql.connect(
-            host= settings.Endpoint,
-            user=settings.user,
-            password=settings.password,
+            host=settings.Endpoint,
+            user=settings.db_user,
+            password=settings.db_password,
             database=settings.database,
             port=settings.port
         )
-
-        logger.info("The connection is being made in the database")
+        logger.info("The connection is being made to the database")
         return connection
-
     except Exception as e:
-        logger.info(f"Database connection is failed {e}")
+        logger.error(f"Database connection failed: {e}")
+        raise Exception(f"Database connection failed: {e}")
