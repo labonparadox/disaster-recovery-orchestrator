@@ -1,0 +1,14 @@
+2026-06-23 16:42:49,720 - database_connection - INFO - Database connection failed: 'data' object has no attribute 'user'
+2026-06-23 16:43:14,616 - database_connection - INFO - Database connection failed: 'data' object has no attribute 'user'
+2026-06-23 16:49:48,490 - database_connection - INFO - Database connection failed: 'data' object has no attribute 'user'
+2026-06-23 16:50:31,714 - database_connection - INFO - Database connection failed: 'data' object has no attribute 'user'
+2026-06-23 16:50:39,295 - database_connection - INFO - Database connection failed: 'data' object has no attribute 'user'
+2026-06-23 17:03:24,374 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:03:31,135 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:03:33,384 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:10:48,915 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:10:51,771 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:10:58,876 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:11:20,796 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:11:28,028 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
+2026-06-23 17:11:30,563 - database_connection - INFO - Database connection failed: (2003, "Can't connect to MySQL server on 'database-2.clegc42skt93.ap-south-1.rds.amazonaws.com' (timed out)")
