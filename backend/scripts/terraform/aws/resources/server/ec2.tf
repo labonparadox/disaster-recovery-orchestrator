@@ -5,6 +5,8 @@ resource "aws_instance" "sample1" {
   key_name = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.security-grp1.id]
 
+  user_data = file("${path.module}/userdata.sh")
+
   tags = {
     Name = "ExampleInstance"
   }

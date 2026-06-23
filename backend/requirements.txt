@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+gunicorn
+pymysql
+pydantic_settings
+pydantic
+sqlalchemy

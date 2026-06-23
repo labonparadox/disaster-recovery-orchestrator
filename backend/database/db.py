@@ -1,32 +1,25 @@
-import mysql.connector
-from dotenv import load_dotenv
-import os
-load_dotenv()
+import pymysql
+import logging
+from helpers.set_logger import LoggerFactory
+from helpers.config import settings
+
+logger = LoggerFactory.get_logger(
+    name="database_connection",
+    log_file=settings.Log_file_signup,
+    level=logging.INFO
+)
 
 def get_db_connection():
-
     try:
-
-        connection = mysql.connector.connect(
-
-            host=os.getenv("DB_HOST"),
-
-            user=os.getenv("DB_USER"),
-
-            password=os.getenv("DB_PASSWORD"),
-
-            database=os.getenv("DB_NAME"),
-
-            port=int(os.getenv("DB_PORT"))
-
+        connection = pymysql.connect(
+            host=settings.Endpoint,
+            user=settings.db_user,
+            password=settings.db_password,
+            database=settings.database,
+            port=settings.port
         )
-
-        print("Database connected successfully")
-
+        logger.info("The connection is being made to the database")
         return connection
-
     except Exception as e:
-
-        print("Database connection failed")
-
-        print(e)
+        logger.error(f"Database connection failed: {e}")
+        raise Exception(f"Database connection failed: {e}")

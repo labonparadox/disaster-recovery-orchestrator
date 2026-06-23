@@ -4,12 +4,7 @@ def signup_user(user):
 
     conn = get_db_connection()
 
-    if conn is None:
-        return {
-            "message": "Database connection failed"
-        }
-
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     # Check if email already exists
 
@@ -29,17 +24,19 @@ def signup_user(user):
             "message": "Email already exists"
         }
 
-    # Insert new user
 
     insert_query = """
-    INSERT INTO users(name, email, password)
-    VALUES(%s, %s, %s)
+    INSERT INTO users(name, email, password, docker_image, port , health_point)
+    VALUES(%s, %s, %s,%s,%s,%s)
     """
 
     values = (
         user.name,
         user.email,
-        user.password
+        user.password,
+        user.image,
+        user.port,
+        user.health_point
     )
 
     cursor.execute(insert_query, values)
