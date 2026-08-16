@@ -1,6 +1,5 @@
-variable "resorce_group_loaction" {
+variable "resource_group_location" {
   type = string
-
 }
 
 variable "resource_group_name" {
@@ -33,4 +32,13 @@ variable "sub_add" {
 
 variable "admin_username" {
   type = string
+}
+
+variable "cidr_blocks_ingress" {
+
+  type = list(string)
+}
+
+variable "ports" {
+  type = list(number)
 }

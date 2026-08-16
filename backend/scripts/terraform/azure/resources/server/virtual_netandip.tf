@@ -1,3 +1,30 @@
+resource "azurerm_network_security_group" "vm_nsg" {
+  name                = "${var.vm_name}-nsg"
+  location            = azurerm_resource_group.vm_rg.location
+  resource_group_name = azurerm_resource_group.vm_rg.name
+
+  # Dynamically generate security rules for open ports
+  dynamic "security_rule" {
+    for_each = var.ports
+    content {
+      name                       = "allow-port-${security_rule.value}"
+      priority                   = 100 + security_rule.key
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = security_rule.value
+      source_address_prefixes    = var.cidr_blocks_ingress
+      destination_address_prefix = "*"
+    }
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "nic_nsg_assoc" {
+  network_interface_id      = azurerm_network_interface.az_nic.id
+  network_security_group_id = azurerm_network_security_group.vm_nsg.id
+}
+
 resource "azurerm_virtual_network" "v_net" {
   address_space = var.address_space
   location            = azurerm_resource_group.vm_rg.location
@@ -31,3 +58,4 @@ resource "azurerm_network_interface" "az_nic" {
     public_ip_address_id = azurerm_public_ip.vm_public_id.id
   }
 }
+
